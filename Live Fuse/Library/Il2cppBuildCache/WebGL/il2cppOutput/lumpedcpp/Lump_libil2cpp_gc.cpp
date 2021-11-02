@@ -1,0 +1,7 @@
+#include "il2cpp-config.h"
+#include "/Users/ctheard/OneDrive/Documents/Unity Build/2020.2.7f1/Unity.app/Contents/il2cpp/libil2cpp/gc/BoehmGC.cpp"
+#include "/Users/ctheard/OneDrive/Documents/Unity Build/2020.2.7f1/Unity.app/Contents/il2cpp/libil2cpp/gc/GCHandle.cpp"
+#include "/Users/ctheard/OneDrive/Documents/Unity Build/2020.2.7f1/Unity.app/Contents/il2cpp/libil2cpp/gc/GarbageCollector.cpp"
+#include "/Users/ctheard/OneDrive/Documents/Unity Build/2020.2.7f1/Unity.app/Contents/il2cpp/libil2cpp/gc/NullGC.cpp"
+#include "/Users/ctheard/OneDrive/Documents/Unity Build/2020.2.7f1/Unity.app/Contents/il2cpp/libil2cpp/gc/WriteBarrier.cpp"
+#include "/Users/ctheard/OneDrive/Documents/Unity Build/2020.2.7f1/Unity.app/Contents/il2cpp/libil2cpp/gc/WriteBarrierValidation.cpp"
