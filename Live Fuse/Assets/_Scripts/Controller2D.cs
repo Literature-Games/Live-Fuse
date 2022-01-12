@@ -4,20 +4,20 @@ using UnityEngine.SceneManagement;
 
 public class Controller2D : MonoBehaviour
 {
-    //player controls
+    [Header("Player Controls")]
     public float moveSpeed = 5f;
     public float jumpForce = 600f;
     public int playerHealth = 1;
-
-    //LayerMask to determine what is considered ground for player
-    public LayerMask whatIsGround;
-
+	
     //for checking if player is grounded
     public Transform groundCheck;
-
     public bool playerCanMove = true;
 
-    //SFX
+    //LayerMask to determine what is considered ground for player
+	[Header("LayerMask")]
+    public LayerMask whatIsGround;
+
+    [Header("SFX")]
     public AudioClip fuseSFX;
 	public AudioClip deathSFX;
 	public AudioClip fallSFX;
@@ -31,8 +31,7 @@ public class Controller2D : MonoBehaviour
     AudioSource _audio;
 
     // hold player motion in this timestep
-	float _vx;
-	float _vy;
+	Vector2 moveDirection;
 
 	// player tracking
 	bool facingRight = true;
@@ -84,22 +83,21 @@ public class Controller2D : MonoBehaviour
 		if (!playerCanMove || (Time.timeScale == 0f))
 			return;
 
-		// determine horizontal velocity change based on the horizontal input
-		_vx = Input.GetAxisRaw ("Horizontal");
-
 		// Determine if running based on the horizontal movement
-		if (_vx != 0) 
-		{
-			isRunning = true;
-		} else {
-			isRunning = false;
-		}
+		moveDirection = InputManager.im.GetMoveDirection();
 
 		// set the running animation state
 		_animator.SetBool("Running", isRunning);
 
+		// Determine if running based on the horizontal movement
+		if (InputManager.im.moving)
+		{
+			isRunning = true;
+		}
+		else isRunning = false;
+
 		// get the current vertical velocity from the rigidbody component
-		_vy = _rigidbody.velocity.y;
+		moveDirection.y = _rigidbody.velocity.y;
 
 		// Check to see if character is grounded by raycasting from the middle of the player
 		// down to the groundCheck position and see if collected with gameobjects on the
@@ -109,25 +107,26 @@ public class Controller2D : MonoBehaviour
 		// Set the grounded animation states
 		_animator.SetBool("Grounded", isGrounded);
 
-		if(isGrounded && Input.GetButtonDown("Jump")) // If grounded AND jump button pressed, then allow the player to jump
+		if(isGrounded && InputManager.im.GetJumpPressed()) // If grounded AND jump button pressed, then allow the player to jump
 		{
 			DoJump();
 		}
 	
 		// If the player stops jumping mid jump and player is not yet falling
 		// then set the vertical velocity to 0 (he will start to fall from gravity)
-		if(Input.GetButtonUp("Jump") && _vy>0f)
+		if(InputManager.im.GetJumpPressed() && moveDirection.y>0f)
 		{
-			_vy = 0f;
+			moveDirection.y = 0f;
 		}
 
 		// Change the actual velocity on the rigidbody
-		_rigidbody.velocity = new Vector2(_vx * moveSpeed, _vy);
+		_rigidbody.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y);
 
 		// if moving up then don't collide with platform layer
 		// this allows the player to jump up through things on the platform layer
 		// NOTE: requires the platforms to be on a layer named "Platform"
-		Physics2D.IgnoreLayerCollision(_playerLayer, _platformLayer, (_vy > 0.0f));  
+		Physics2D.IgnoreLayerCollision(_playerLayer, _platformLayer, (moveDirection.y > 0.0f));
+
     }
 
     void LateUpdate()
@@ -135,10 +134,10 @@ public class Controller2D : MonoBehaviour
         // get the current scale
 		Vector3 localScale = _transform.localScale;
 
-		if (_vx > 0) // moving right so face right
+		if (moveDirection.x > 0) // moving right so face right
 		{
 			facingRight = true;
-		} else if (_vx < 0) { // moving left so face left
+		} else if (moveDirection.x < 0) { // moving left so face left
 			facingRight = false;
 		}
 
@@ -155,7 +154,7 @@ public class Controller2D : MonoBehaviour
     public void DoJump()
     {
 		// reset current vertical motion to 0 prior to jump
-		_vy = 0f;
+		moveDirection.y = 0f;
 		// add a force in the up direction
 		_rigidbody.AddForce (new Vector2 (0, jumpForce));
 		// play the jump sound

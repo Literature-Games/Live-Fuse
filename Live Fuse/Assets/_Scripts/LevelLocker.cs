@@ -6,18 +6,23 @@ public class LevelLocker : MonoBehaviour
 {
     public static LevelLocker ll;
 
+    //private vaibales below
     static int _Level01;
     static int _Level02;
     static int _Level03;
 
-    int num;
-
+    int num; //returns the numbers 0 or 1 to the calling function
 
     void Awake()
     {
         if(ll == null)
             ll = this.GetComponent<LevelLocker>();
     }
+
+    /*
+    *   Turn the static variable to 1 if the level is completed
+    *   Else, return as default
+    */
     public void UnlockLevel(string levelName)
     {
         Debug.Log("Level name " + levelName);
@@ -37,6 +42,10 @@ public class LevelLocker : MonoBehaviour
                 break;
         }
     }
+
+    /*
+    *   Return the integer stored in the static variable to the calling funtion
+    */
     public int GiveNumber(string levelName)
     {
         switch(levelName)

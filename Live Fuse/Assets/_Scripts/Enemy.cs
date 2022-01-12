@@ -26,11 +26,9 @@ public class Enemy : MonoBehaviour
 	public bool loopWaypoints = true; // should it loop through the waypoints
 
 	// private variables
-
 	Transform _transform;
     Rigidbody2D _rigidbody;
     Animator _animator;
-	//AudioSource _audio;
 	int _myWaypointIndex = 0;		// used as index for My_Waypoints
 	float _moveTime;
     float _vx = 0f;
@@ -48,15 +46,6 @@ public class Enemy : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		if (_animator==null) // if Animator is missing
 			Debug.LogError("Animator component missing from this gameobject");
-		
-		/*
-		_audio = GetComponent<AudioSource> ();
-		if (_audio==null) { // if AudioSource is missing
-			Debug.LogWarning("AudioSource component missing from this gameobject. Adding one.");
-			// let's just add the AudioSource component dynamically
-			_audio = gameObject.AddComponent<AudioSource>();
-		
-        */
     }
 
 	// Use this for initialization

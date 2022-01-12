@@ -23,7 +23,7 @@ public class Interactable : MonoBehaviour
 		if(isInRange && !hasInteracted)
 		{
             // let the item know the player has interacted
-			if(Input.GetKeyDown(KeyCode.E))
+			if(InputManager.im.GetInteractPressed())
 			{
 				Debug.Log("Play has interacted with " + interacted);
 				hasInteracted = true;

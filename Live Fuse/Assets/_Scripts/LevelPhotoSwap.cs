@@ -8,6 +8,7 @@ public class LevelPhotoSwap : MonoBehaviour
     public List<Image> originals = new List<Image>();
     public List<Sprite> replacements = new List<Sprite>();
 
+    //private variables below
     int L1Complete;
     int L2Complete;
     int L3Complete;

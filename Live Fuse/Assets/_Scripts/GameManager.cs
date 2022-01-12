@@ -13,13 +13,12 @@ public class GameManager : MonoBehaviour
 	[HideInInspector] public string currentLevel;
 	public Text fusesText;
 
-    // game performance
+    [Header("game performance")] 
     public int score = 0;
     public int lives = 3;
 
-    // UI elements to control
+    [Header("UI elements to control")]
     public GameObject[] UIExtraLives;
-	public GameObject UIGamePaused;
 
     // private variables
 	GameObject _player;
@@ -40,13 +39,13 @@ public class GameManager : MonoBehaviour
 	void Update() {
 		// if ESC pressed then pause the game
         
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (InputManager.im.GetPausePressed()) {
 			if (Time.timeScale > 0f) {
-				UIGamePaused.SetActive(true); // this brings up the pause UI
+				PauseMenuManager.pm.OpenPause(); // this brings up the pause UI
 				Time.timeScale = 0f; // this pauses the game action
 			} else {
 				Time.timeScale = 1f; // this unpauses the game action (ie. back to normal)
-				UIGamePaused.SetActive(false); // remove the pause UI
+				PauseMenuManager.pm.ClosePause(); // this brings up the pause UI
 			}
 		}
 	}
@@ -80,10 +79,6 @@ public class GameManager : MonoBehaviour
 		if(currentLevel=="") {
 			currentLevel = _scene.name;
 		}
-
-		// friendly error messages
-		if (UIGamePaused==null)
-			Debug.LogError ("Need to set UIGamePaused on Game Manager.");
 		
 		// get stored player prefs
 		refreshPlayerState();
@@ -144,12 +139,6 @@ public class GameManager : MonoBehaviour
 		if(LevelLocker.ll)
 			LevelLocker.ll.UnlockLevel(currentLevel);
 		// use a coroutine to allow the player to get fanfare before moving to next level
-		StartCoroutine(LoadNextLevel());
-	}
-
-	// load the nextLevel after delay
-	IEnumerator LoadNextLevel() {
-		yield return new WaitForSeconds(3.5f);
-		SceneManager.LoadScene(levelAfterVictory);
+		SceneTransition.st.LoadLevel(levelAfterVictory);
 	}
 }
